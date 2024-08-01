@@ -1,0 +1,10 @@
+{
+    "development":{
+        "username": "desarrollo",
+        "password": "desarollo",
+        "database": "khat_pis",
+        "host": "mysql.khat.local",
+        "dialect": "mysql",
+        "operatorAliases": false
+    }
+}

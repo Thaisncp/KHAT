@@ -1,0 +1,47 @@
+version: '3.9'
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: khat_pis_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: desarrollo
+      MYSQL_PASSWORD: desarollo
+      MYSQL_DATABASE: khat_pis
+    ports:
+      - "3307:3306"  # Cambia el puerto del host a 3307 y mantiene el puerto del contenedor como 3306
+    networks:
+      - khat_network
+
+  backend:
+    build:
+      context: ./khat_tf2
+    container_name: khat_pis_backend
+    environment:
+      DB_USERNAME: desarrollo
+      DB_PASSWORD: desarollo
+      DB_NAME: khat_pis
+      DB_HOST: mysql.khat.local
+      DB_DIALECT: mysql
+    ports:
+      - "3001:3000"  # Exponer el puerto 3000 del contenedor en el puerto 3001 del host
+    depends_on:
+      - mysql
+    networks:
+      - khat_network
+
+  frontend:
+    build:
+      context: ./KHAT-TF
+    container_name: khat_pis_frontend
+    ports:
+      - "3000:3000"  # Exponer el puerto 3000 del contenedor en el puerto 3000 del host
+    depends_on:
+      - backend
+    networks:
+      - khat_network
+
+networks:
+  khat_network:
+    driver: bridge
